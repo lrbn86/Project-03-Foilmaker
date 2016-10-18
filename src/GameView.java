@@ -24,13 +24,4 @@ public class GameView extends JFrame {
         setResizable(false);
         setVisible(true);
     }
-
-
 }
-
-
-/**
- * Purpose of Method
- * @param parameters (may be more than one)
- * @return (if not void)
- * Methods*/
