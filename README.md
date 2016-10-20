@@ -1,2 +1,2 @@
-# Project-03-Pysche
+# Project-03-Foilmaker
 CS18000 Project
