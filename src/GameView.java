@@ -1,5 +1,8 @@
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * GameView.java
@@ -7,7 +10,7 @@ import java.awt.*;
  * This class shows game changes and updates to the user.
  * Implements Java GUI classes.
  *
- * @author Brandon Nguyen, nguye299@purdue.edu, Lab Section G06
+ * @author Brandon Nguyen & Daniel Acevedo, nguye299@purdue.edu & acevedd@purdue.edu, Lab Section G06
  *
  * @version October 18, 2016
  *
@@ -54,20 +57,48 @@ public class GameView extends JFrame {
     private JTextField userSuggestionInput = new JTextField();
 
     private Container cPane;
-
+    private Container c2;
 
 
     public GameView() {
+    	
         setTitle(TITLE);
         setPreferredSize(new Dimension (FRAME_WIDTH, FRAME_HEIGHT));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         pack();
         setVisible(true);
-
+        
+        //setup content layout
+        FlowLayout layout = new FlowLayout();
+        layout.setVgap(300);
         cPane = this.getContentPane();
+        cPane.setLayout(layout);
+        
+        
         login.setSize(200, 200);
-        cPane.add(login, BorderLayout.CENTER);
+        cPane.add(login);
+        
+        register.setSize(200, 200);
+        cPane.add(register);
+        
+      //add action listener to login/register buttons
+        login.addActionListener(new ActionListener(){					
+        	public void actionPerformed(ActionEvent arg0){
+        		JOptionPane.showMessageDialog(null, "Login pressed");
+        	}
+        });
+        
+        register.addActionListener(new ActionListener(){
+        	public void actionPerformed(ActionEvent arg0){
+        		JOptionPane.showMessageDialog(null, "Register pressed");
+        	}
+        });
+        
 
+    }
+    
+    public static void main(String[] args){
+    	new GameView();
     }
 }
