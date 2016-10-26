@@ -4,7 +4,7 @@
  * This class manipulates data in the model as per user interactions.
  * Implements network programming pits, application protocol, etc.
  *
- * @author Brandon Nguyen, nguye299@purdue.edu, Lab Section G06
+ * @author Brandon Nguyen & Daniel Acevedo, nguye299@purdue.edu & acevedd@purdue.edu, Lab Section G06
  *
  * @version October 18, 2016
  *
