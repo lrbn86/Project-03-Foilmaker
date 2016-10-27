@@ -61,40 +61,13 @@ public class GameView extends JFrame {
 
 
     public GameView() {
-    	
+
         setTitle(TITLE);
         setPreferredSize(new Dimension (FRAME_WIDTH, FRAME_HEIGHT));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         pack();
         setVisible(true);
-        
-        //setup content layout
-        FlowLayout layout = new FlowLayout();
-        layout.setVgap(300);
-        cPane = this.getContentPane();
-        cPane.setLayout(layout);
-        
-        
-        login.setSize(200, 200);
-        cPane.add(login);
-        
-        register.setSize(200, 200);
-        cPane.add(register);
-        
-      //add action listener to login/register buttons
-        login.addActionListener(new ActionListener(){					
-        	public void actionPerformed(ActionEvent arg0){
-        		JOptionPane.showMessageDialog(null, "Login pressed");
-        	}
-        });
-        
-        register.addActionListener(new ActionListener(){
-        	public void actionPerformed(ActionEvent arg0){
-        		JOptionPane.showMessageDialog(null, "Register pressed");
-        	}
-        });
-        
 
     }
     
