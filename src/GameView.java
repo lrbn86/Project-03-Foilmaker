@@ -1,5 +1,6 @@
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,9 +22,23 @@ public class GameView extends JFrame {
     public final int FRAME_WIDTH = 300;
     public final int FRAME_HEIGHT = 500;
 
+    boolean isGameOver = false;
+
     JPanel mainPanel = new JPanel();
     JPanel topPanel = new JPanel();
     JPanel middlePanel = new JPanel();
+
+    // States will be added into the middlePanel
+    // Use CardLayout() to switch between states on button press
+    JPanel loginRegisterState = new JPanel();
+    JPanel createOrJoinState = new JPanel();
+    JPanel gameStartedState = new JPanel();
+    JPanel gameJoinedState = new JPanel();
+    JPanel waitingForGameState = new JPanel();
+    JPanel submissionState = new JPanel();
+    JPanel pickAnOptionState = new JPanel();
+    JPanel resultState = new JPanel();
+
     JPanel bottomPanel = new JPanel();
 
     // Labels
@@ -111,9 +126,18 @@ public class GameView extends JFrame {
 
         // user can quit by exiting GUI
 
-
+        // There are 8 states (panels)
         mainPanel.add(middlePanel, BorderLayout.CENTER);
         middlePanel.setBorder(BorderFactory.createEtchedBorder());
+        middlePanel.add(loginRegisterState);
+        loginRegisterState.setLayout(new BorderLayout());
+        loginRegisterState.add(usernameLabel, BorderLayout.PAGE_START);
+        loginRegisterState.add(username);
+        loginRegisterState.add(passwordLabel, BorderLayout.PAGE_START);
+        loginRegisterState.add(password);
+        loginRegisterState.add(login, BorderLayout.CENTER);
+        loginRegisterState.add(register, BorderLayout.CENTER);
+
 
     }
 
@@ -122,7 +146,7 @@ public class GameView extends JFrame {
         // The bottom panel's label will change according to the middle panel states
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
         bottomPanel.setLayout(new BorderLayout());
-        bottomPanel.add(new JLabel("New user created"), BorderLayout.WEST);
+        bottomPanel.add(new JLabel("TEST"), BorderLayout.WEST);
 
     }
     
