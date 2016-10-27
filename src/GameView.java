@@ -21,6 +21,11 @@ public class GameView extends JFrame {
     public final int FRAME_WIDTH = 300;
     public final int FRAME_HEIGHT = 500;
 
+    JPanel mainPanel = new JPanel();
+    JPanel topPanel = new JPanel();
+    JPanel middlePanel = new JPanel();
+    JPanel bottomPanel = new JPanel();
+
     // Labels
     JLabel greetingLabel = new JLabel ("Welcome!");
     JLabel newUserLabel = new JLabel ("New user created");
@@ -56,10 +61,6 @@ public class GameView extends JFrame {
     private JTextField gameKeyInput = new JTextField();
     private JTextField userSuggestionInput = new JTextField();
 
-    private Container cPane;
-    private Container c2;
-
-
     public GameView() {
 
         setTitle(TITLE);
@@ -67,7 +68,61 @@ public class GameView extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         pack();
+        setupGUI();
         setVisible(true);
+
+    }
+
+
+    public void setupGUI() {
+        setupMainPanel();
+    }
+
+    public void setupMainPanel() {
+        add(mainPanel);
+        mainPanel.setLayout(new BorderLayout());
+        setupTopPanel();
+        setupMiddlePanel();
+        setupBottomPanel();
+    }
+
+    public void setupTopPanel() {
+
+        // The top panel's label will change from 'FoilerMaker!' to the username after logging in
+
+        mainPanel.add(topPanel, BorderLayout.NORTH);
+        topPanel.add(new JLabel ("Foilermaker!"));
+    }
+
+    public void setupMiddlePanel() {
+
+        // The middle panel will be changing to different panels (different states)
+
+        // The starting panel will show the login/register state
+        // The second panel will show the startNewGame/joinAGame state
+        // if player chooses startNewGame, then change to the GameStarted state
+        // if player chooses joinAGame, then change to the JoinGame state
+        // once player press Join Game, change to waiting state
+
+        // once game starts, change to SubmitSuggestion state
+        // after submission, change to pick option state
+        // after picking options, change to result state
+        // after clicking next round, go all the way back to SubmitSuggestion state (but with a different word)
+
+        // user can quit by exiting GUI
+
+
+        mainPanel.add(middlePanel, BorderLayout.CENTER);
+        middlePanel.setBorder(BorderFactory.createEtchedBorder());
+
+    }
+
+    public void setupBottomPanel() {
+
+        // The bottom panel's label will change according to the middle panel states
+        mainPanel.add(bottomPanel, BorderLayout.SOUTH);
+        bottomPanel.setLayout(new BorderLayout());
+        bottomPanel.add(new JLabel("New user created"), BorderLayout.WEST);
 
     }
     
