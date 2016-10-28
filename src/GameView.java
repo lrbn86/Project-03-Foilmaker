@@ -16,7 +16,7 @@ import java.awt.event.ActionListener;
  * @version October 18, 2016
  *
  */
-public class GameView extends JFrame {
+public class GameView extends JFrame implements ActionListener {
 
     public final String TITLE = "Foilmaker";
     public final int FRAME_WIDTH = 300;
@@ -42,6 +42,7 @@ public class GameView extends JFrame {
     JPanel bottomPanel = new JPanel();
 
     // Labels
+    JLabel topPanelMessage = new JLabel ("FoilerMaker!");
     JLabel greetingLabel = new JLabel ("Welcome!");
     JLabel newUserLabel = new JLabel ("New user created");
     JLabel usernameLabel = new JLabel ("Username");
@@ -84,6 +85,7 @@ public class GameView extends JFrame {
 //        setResizable(false);
         pack();
         setupGUI();
+        handleButtons();
         setVisible(true);
 
     }
@@ -106,7 +108,7 @@ public class GameView extends JFrame {
         // The top panel's label will change from 'FoilerMaker!' to the username after logging in
 
         mainPanel.add(topPanel, BorderLayout.NORTH);
-        topPanel.add(new JLabel ("Foilermaker!"));
+        topPanel.add(topPanelMessage);
     }
 
     public void setupMiddlePanel() {
@@ -133,20 +135,37 @@ public class GameView extends JFrame {
         setupLoginRegisterState();
     }
 
+    // TODO
     public void setupLoginRegisterState() {
-        middlePanel.add(loginRegisterState, BorderLayout.CENTER);
-        loginRegisterState.setBorder(BorderFactory.createEtchedBorder());
 
-        JPanel loginRegisterPanel = new JPanel();
-        JPanel usernamePasswordPanel = new JPanel();
+        Border etchedBorder = BorderFactory.createEtchedBorder();
+
+        middlePanel.add(loginRegisterState, BorderLayout.CENTER);
+        loginRegisterState.setBorder(etchedBorder);
+        loginRegisterState.setLayout(new BorderLayout());
+        JPanel mainPanel = new JPanel();
+
+        JPanel loginRegisterButtonsPanel = new JPanel();
+        JPanel usernamePasswordLabelPanel = new JPanel();
         JPanel textFieldPanel = new JPanel();
 
+        mainPanel.setLayout(new GridLayout(2, 0));
 
-        loginRegisterPanel.add(login);
-        loginRegisterPanel.add(register);
-        loginRegisterState.add(loginRegisterPanel);
+        // Find a way to make this look better...
+        textFieldPanel.setBorder(etchedBorder);
+        textFieldPanel.setLayout(new GridLayout(2, 0));
+        textFieldPanel.add(username);
+        textFieldPanel.add(password);
 
+        mainPanel.add(textFieldPanel);
 
+        loginRegisterButtonsPanel.setBorder(etchedBorder);
+        mainPanel.add(loginRegisterButtonsPanel, 1);
+
+        loginRegisterButtonsPanel.add(login);
+        loginRegisterButtonsPanel.add(register);
+
+        loginRegisterState.add(mainPanel);
     }
 
     public void setupBottomPanel() {
@@ -157,6 +176,64 @@ public class GameView extends JFrame {
         bottomPanel.add(new JLabel("TEST"), BorderLayout.WEST);
 
     }
+
+    public void handleButtons() {
+
+        login.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Do something when 'Login' button is pressed
+            }
+        });
+
+        register.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // D something when 'Register' button is pressed
+                topPanelMessage.setText(username.getText());
+            }
+        });
+
+        startNewGame.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Do something when 'Start New Game' button is pressed
+            }
+        });
+
+        joinGame.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Do something when 'Join Game' button is pressed
+            }
+        });
+
+        submitSuggestion.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Do something when 'Submit Suggestion' button is pressed
+            }
+        });
+
+        submitOption.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Do something when 'Submit Option' button is pressed
+            }
+        });
+
+        nextRound.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Do something when 'Next Round' button is pressed
+            }
+        });
+
+    }
+
+
+    // Required unused method to prevent compile error
+    public void actionPerformed(ActionEvent e) {}
     
     public static void main(String[] args){
     	new GameView();
