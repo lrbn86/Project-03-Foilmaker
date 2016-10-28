@@ -81,7 +81,7 @@ public class GameView extends JFrame {
         setTitle(TITLE);
         setPreferredSize(new Dimension (FRAME_WIDTH, FRAME_HEIGHT));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setResizable(false);
+//        setResizable(false);
         pack();
         setupGUI();
         setVisible(true);
@@ -129,14 +129,22 @@ public class GameView extends JFrame {
         // There are 8 states (panels)
         mainPanel.add(middlePanel, BorderLayout.CENTER);
         middlePanel.setBorder(BorderFactory.createEtchedBorder());
-        middlePanel.add(loginRegisterState);
-        loginRegisterState.setLayout(new BorderLayout());
-        loginRegisterState.add(usernameLabel, BorderLayout.PAGE_START);
-        loginRegisterState.add(username);
-        loginRegisterState.add(passwordLabel, BorderLayout.PAGE_START);
-        loginRegisterState.add(password);
-        loginRegisterState.add(login, BorderLayout.CENTER);
-        loginRegisterState.add(register, BorderLayout.CENTER);
+        middlePanel.setLayout(new BorderLayout());
+        setupLoginRegisterState();
+    }
+
+    public void setupLoginRegisterState() {
+        middlePanel.add(loginRegisterState, BorderLayout.CENTER);
+        loginRegisterState.setBorder(BorderFactory.createEtchedBorder());
+
+        JPanel loginRegisterPanel = new JPanel();
+        JPanel usernamePasswordPanel = new JPanel();
+        JPanel textFieldPanel = new JPanel();
+
+
+        loginRegisterPanel.add(login);
+        loginRegisterPanel.add(register);
+        loginRegisterState.add(loginRegisterPanel);
 
 
     }
