@@ -1,9 +1,9 @@
-
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.*;
 
 /**
  * GameView.java
@@ -24,12 +24,16 @@ public class GameView extends JFrame implements ActionListener {
 
     boolean isGameOver = false;
 
+    String currentWorkingDir = System.getProperty("user.dir");
+    File userDatabase = new File(currentWorkingDir + "/UserDatabase.txt");
+
+
     JPanel mainPanel = new JPanel();
     JPanel topPanel = new JPanel();
     JPanel middlePanel = new JPanel();
 
     // States will be added into the middlePanel
-    // Use CardLayout() to switch between states on button press
+    // Use CardLayout() to switch between states on button presses
     JPanel loginRegisterState = new JPanel();
     JPanel createOrJoinState = new JPanel();
     JPanel gameStartedState = new JPanel();
@@ -72,8 +76,8 @@ public class GameView extends JFrame implements ActionListener {
     private JButton nextRound = new JButton ("Next Round");
 
     // Input Fields
-    private JTextField username = new JTextField();
-    private JTextField password = new JTextField();
+    private JTextField usernameInput = new JTextField();
+    private JTextField passwordInput = new JTextField();
     private JTextField gameKeyInput = new JTextField();
     private JTextField userSuggestionInput = new JTextField();
 
@@ -87,6 +91,9 @@ public class GameView extends JFrame implements ActionListener {
         setupGUI();
         handleButtons();
         setVisible(true);
+
+        System.out.println(userDatabase);
+        System.out.println(userDatabase.canWrite());
 
     }
 
@@ -144,26 +151,21 @@ public class GameView extends JFrame implements ActionListener {
         loginRegisterState.setBorder(etchedBorder);
         loginRegisterState.setLayout(new BorderLayout());
         JPanel mainPanel = new JPanel();
-
-        JPanel loginRegisterButtonsPanel = new JPanel();
-        JPanel usernamePasswordLabelPanel = new JPanel();
-        JPanel textFieldPanel = new JPanel();
-
         mainPanel.setLayout(new GridLayout(2, 0));
-
-        // Find a way to make this look better...
-        textFieldPanel.setBorder(etchedBorder);
-        textFieldPanel.setLayout(new GridLayout(2, 0));
-        textFieldPanel.add(username);
-        textFieldPanel.add(password);
-
-        mainPanel.add(textFieldPanel);
+        JPanel loginRegisterButtonsPanel = new JPanel();
+        JPanel usernamePasswordPanel = new JPanel();
 
         loginRegisterButtonsPanel.setBorder(etchedBorder);
-        mainPanel.add(loginRegisterButtonsPanel, 1);
-
         loginRegisterButtonsPanel.add(login);
         loginRegisterButtonsPanel.add(register);
+
+        usernamePasswordPanel.setLayout(new GridLayout(2, 2));
+        usernamePasswordPanel.add(usernameLabel);
+        usernamePasswordPanel.add(usernameInput);
+        usernamePasswordPanel.add(passwordLabel);
+        usernamePasswordPanel.add(passwordInput);
+        mainPanel.add(usernamePasswordPanel);
+        mainPanel.add(loginRegisterButtonsPanel);
 
         loginRegisterState.add(mainPanel);
     }
@@ -183,14 +185,20 @@ public class GameView extends JFrame implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Do something when 'Login' button is pressed
+
+                // Set the text of the topPanelMessage to the username
+
             }
         });
 
         register.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // D something when 'Register' button is pressed
-                topPanelMessage.setText(username.getText());
+                // Do something when 'Register' button is pressed
+
+                // Store username and password to database
+
+
             }
         });
 
