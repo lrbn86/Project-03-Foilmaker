@@ -1,48 +1,62 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
-
 /**
- * FoilerMakerNetworkProtocol.java
- *
- *
- *
- * @author Brandon Nguyen & Daniel Acevedo, nguye299@purdue.edu & acevedd@purdue.edu, Lab Section G06
- *
- * @version October 25, 2016
+ * Created by sunil on 6/28/16.
+ * This class defined the protocol used to communicate between FoilMaker clients and the server.
  *
  */
+public class FoilMakerNetworkProtocol {
 
-public class FoilerMakerNetworkProtocol {
-	
-	public static void main(String[] args){
-		
-	String serverIP = "localhost";
-		
-	int serverPort = 9999;
-		
-	try{
-		//Connect to server
-		Socket socket = new Socket(serverIP, serverPort);
-		
-		//Create data writer
-		PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-		
-		//Create data reader
-		InputStreamReader isr = new InputStreamReader(socket.getInputStream());
-		BufferedReader in = new BufferedReader(isr);
-		
-		//Send message to server
-		out.println("Message to server");
-		
-		//Read server response
-		String serverMessage = in.readLine();
-		
-	}catch(IOException e){
-		e.printStackTrace();
-	}
-	
+    public static enum MSG_TYPE {
+        //Client messages to server
 
-}}
+        CREATENEWUSER, // Tokens: userName  passWord
+        LOGIN, // Tokens: userName password
+        LOGOUT, // Tokens:  currentLoginToken?
+        STARTNEWGAME, // No tokens?
+        JOINGAME, // Tokens: currentLoginToken gameKey
+        ALLPARTICIPANTSHAVEJOINED, // Send from leader to server; Tokens: currentLoginToken gameKey
+
+        //Client message to server during a game
+        PLAYERCHOICE, // Tokens: currentLoginToken gameKey user'sChoice
+        PLAYERSUGGESTION, // Tokens: currentLoginToken gameKey user'sChoice
+
+        // Server messages to client
+        NEWPARTICIPANT, //From server to leader; Tokens: participantName cummulativeScore
+        RESPONSE, // Server response to user request
+                    /* Tokens:
+                     * clientRequestMsgType -- the MSG_TYPE of the client's request
+                     * responseDetail -- the MSG_DETAIL_T of the server's response
+                     * <Other optional tokens specific to MSG_DETAIL_T>
+                     */
+
+
+        //Server messages to clients during a game
+        NEWGAMEWORD, // From server to players; Tokens: cardFrontText cardBackText
+        ROUNDOPTIONS, // From server to players; Tokens: randomized list of user suggestions and true answer
+        ROUNDRESULT, //From server to players; Tokens: uName1 score1 message1 uName2 score2 message2 ....
+        GAMEOVER // From server to players: Tokens: MSG_DETAIL
+    };
+
+    public static enum MSG_DETAIL_T {
+        SUCCESS, // Request was successfull. For LOGIN: currentLoginToken;  For STARTNEWGAME: gameKey; For JOINGAME:
+        // gameKey;
+        INVALIDUSERNAME,
+        INVALIDUSERPASSWORD,
+        USERALREADYEXISTS,
+        UNKNOWNUSER,
+        USERALREADYLOGGEDIN,
+        GAMEKEYNOTFOUND,
+        NO_CONNECTION_TO_SERVER,
+        ERROR_OPENING_NETWORK_CONNECTION,
+        USERNOTLOGGEDIN,
+        USERNOTGAMELEADER,
+        INVALIDGAMETOKEN,
+        UNEXPECTEDMESSAGETYPE,
+        INVALIDMESSAGEFORMAT, //TODO received msg with tokens EXPECTING: expected format
+        FAILURE // optional details of failure cause
+    };
+
+    //TODO Create error codes type and values
+    public static final String SEPARATOR = "--";
+    public static final int LOGIN_TOKEN_LENGTH = 10;
+    public static final int GAME_KEY_LENGTH = 3;
+}
