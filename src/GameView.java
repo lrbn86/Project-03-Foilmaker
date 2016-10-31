@@ -1,4 +1,3 @@
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -15,90 +14,122 @@ import java.awt.event.ActionListener;
  * @version October 18, 2016
  *
  */
-public class GameView extends JFrame {
+public class FMView extends JFrame implements ActionListener{
 
-    public final String TITLE = "Foilmaker";
-    public final int FRAME_WIDTH = 300;
-    public final int FRAME_HEIGHT = 500;
+    private Foilermaker controller;
 
-    // Labels
-    JLabel greetingLabel = new JLabel ("Welcome!");
-    JLabel newUserLabel = new JLabel ("New user created");
-    JLabel usernameLabel = new JLabel ("Username");
-    JLabel passwordLabel = new JLabel ("Password");
+    public final static String GAME_TITLE = "FoilerMaker";
+    public final static int FRAME_WIDTH = 300;
+    public final static int FRAME_HEIGHT = 500;
 
-    JLabel startGameLabel = new JLabel ("Press <Start game> to start game");
-    JLabel joinedGameLabel = new JLabel ("Joined game: waiting for leader");
-    JLabel useThisKeyToJoin = new JLabel ("Others should use this key to join your game");
-    JLabel waitForLeaderLabel = new JLabel ("Waiting for leader ...");
-    JLabel playerIsLeaderLabel = new JLabel ("Game started: You are the leader");
+    private JLabel title = new JLabel("FoilerMaker!");
+    private JLabel statusMessage = new JLabel("Enter the valid server host and the port number");
+    private JLabel serverHostLabel = new JLabel ("Server Host: ");
+    private JLabel portNumberLabel = new JLabel("Port Number: ");
+    private JLabel usernameLabel = new JLabel("Username: ");
+    private JLabel passwordLabel = new JLabel("Password: ");
 
-    JLabel whatIsWordLabel = new JLabel ("What is the word for");
-    JLabel yourSuggestionLabel = new JLabel ("Your Suggestion");
-    JLabel enterSuggestionLabel = new JLabel ("Enter your suggestion");
-    JLabel pickOptionLabel = new JLabel ("Pick your option below");
-    JLabel pickChoiceLabel = new JLabel ("Pick your choice");
-    JLabel nextRoundReadyLabel = new JLabel ("Click <Next Round> when ready");
-    JLabel gameOverLabel = new JLabel ("Game over!");
+    JButton connectButton = new JButton ("Connect");
+    JButton loginButton = new JButton ("Login");
+    JButton registerButton = new JButton("Register");
 
-    // Buttons
-    private JButton login = new JButton ("Login");
-    private JButton register = new JButton ("Register");
-    private JButton startNewGame = new JButton ("Start New Game");
-    private JButton joinGame = new JButton ("Join a Game");
-    private JButton submitSuggestion = new JButton ("Submit Suggestion");
-    private JButton submitOption = new JButton ("Submit Option");
-    private JButton nextRound = new JButton ("Next Round");
+    JTextField serverHostInput = new JTextField(8);
+    JTextField portNumberInput = new JTextField(8);
+    JTextField usernameInput = new JTextField(8);
+    JPasswordField passwordInput = new JPasswordField(8);
 
-    // Input Fields
-    private JTextField username = new JTextField();
-    private JTextField password = new JTextField();
-    private JTextField gameKeyInput = new JTextField();
-    private JTextField userSuggestionInput = new JTextField();
+    JPanel top = new JPanel();
+    JPanel middle = new JPanel(new CardLayout());
+    JPanel bottom = new JPanel();
 
-    private Container cPane;
-    private Container c2;
+    JPanel CONNECT_STATE = new JPanel(new GridBagLayout());
+    JPanel LOGIN_REGISTER_STATE = new JPanel (new GridBagLayout());
+    JPanel NEW_OR_JOIN_GAME_STATE = new JPanel();
 
 
-    public GameView() {
-    	
-        setTitle(TITLE);
-        setPreferredSize(new Dimension (FRAME_WIDTH, FRAME_HEIGHT));
+    public FMView(Foilermaker controller) {
+        this.controller = controller;
+        setTitle(GAME_TITLE);
+        setSize(FRAME_WIDTH, FRAME_HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setResizable(false);
-        pack();
+        setUpGUI();
+//        this.pack();
         setVisible(true);
-        
-        //setup content layout
-        FlowLayout layout = new FlowLayout();
-        layout.setVgap(300);
-        cPane = this.getContentPane();
-        cPane.setLayout(layout);
-        
-        
-        login.setSize(200, 200);
-        cPane.add(login);
-        
-        register.setSize(200, 200);
-        cPane.add(register);
-        
-      //add action listener to login/register buttons
-        login.addActionListener(new ActionListener(){					
-        	public void actionPerformed(ActionEvent arg0){
-        		JOptionPane.showMessageDialog(null, "Login pressed");
-        	}
-        });
-        
-        register.addActionListener(new ActionListener(){
-        	public void actionPerformed(ActionEvent arg0){
-        		JOptionPane.showMessageDialog(null, "Register pressed");
-        	}
-        });
-        
+    }
+
+    public void setStatusMessage(String msg) {
+        statusMessage.setText(msg);
+    }
+
+    public void setUpGUI() {
+        top.add(title);
+        add(top, BorderLayout.NORTH);
+
+        middle.setBorder(BorderFactory.createEtchedBorder());
+        add(middle, BorderLayout.CENTER);
+
+        bottom.add(statusMessage);
+        add(bottom, BorderLayout.SOUTH);
+
+        addToMiddlePanel();
+        showConnectState();
+        showLoginRegisterState();
 
     }
-    
-    public static void main(String[] args){
-    	new GameView();
+
+    public void addToMiddlePanel() {
+        middle.add(CONNECT_STATE, "CONNECT_STATE");
+        middle.add(LOGIN_REGISTER_STATE, "LOGIN_REGISTER_STATE");
     }
+
+    public void showConnectState() {
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = 0;
+        CONNECT_STATE.add(serverHostLabel, c);
+        c.gridy++;
+        CONNECT_STATE.add(portNumberLabel, c);
+        c.gridy++;
+
+        c.gridx = 1;
+        c.gridy = 0;
+
+        CONNECT_STATE.add(serverHostInput, c);
+        c.gridy++;
+        CONNECT_STATE.add(portNumberInput, c);
+
+        c.gridy++;
+        CONNECT_STATE.add(connectButton, c);
+
+        connectButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.connectToServer();
+                CardLayout c = (CardLayout) middle.getLayout();
+                c.show(middle, "LOGIN_REGISTER_STATE");
+                setStatusMessage("Please login or register to play!");
+            }
+        });
+    }
+
+    public void showLoginRegisterState() {
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = 0;
+
+        LOGIN_REGISTER_STATE.add(usernameLabel, c);
+        c.gridy++;
+        LOGIN_REGISTER_STATE.add(passwordLabel, c);
+        c.gridy++;
+        LOGIN_REGISTER_STATE.add(loginButton, c);
+        c.gridx = 1;
+        c.gridy = 0;
+        LOGIN_REGISTER_STATE.add(usernameInput, c);
+        c.gridy++;
+        LOGIN_REGISTER_STATE.add(passwordInput, c);
+        c.gridy++;
+        LOGIN_REGISTER_STATE.add(registerButton, c);
+    }
+
+    public void actionPerformed(ActionEvent e) {}
 }
