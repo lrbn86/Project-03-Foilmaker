@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * GameView.java
+ * FMView.java
  *
  * This class shows game changes and updates to the user.
  * Implements Java GUI classes.
