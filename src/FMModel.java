@@ -1,5 +1,5 @@
 /**
- * GameModel.java
+ * FMModel.java
  *
  * This class maintains data structures that reflects the internal state of the whole application.
  * Captures data (questions, qord suggestions, etc. received from the server)
