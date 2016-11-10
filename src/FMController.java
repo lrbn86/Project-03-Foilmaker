@@ -1,0 +1,234 @@
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.net.SocketTimeoutException;
+
+/**
+ * FMController.java
+ *
+ * This class manipulates data in the model as per user interactions.
+ * Implements network programming bits, application protocol, etc.
+ *
+ * @author Brandon Nguyen & Daniel Acevedo, nguye299@purdue.edu & acevedd@purdue.edu, Lab Section G06
+ *
+ * @version November 10, 2016
+ *
+ */
+public class FMController {
+
+    private FMModel model;
+    private FMView view;
+    private FoilMakerNetworkProtocol protocol;
+    private Socket socket;
+    private String serverIP;
+    private int serverPort;
+    private PrintWriter out;
+    private BufferedReader in;
+
+    public FMController(FMModel model, FMView view) {
+        this.model = model;
+        this.view = view;
+        protocol = new FoilMakerNetworkProtocol();
+        connectToServer();
+        handleButtons();
+    }
+
+
+    public void connectToServer() {
+        try {
+            serverIP = "localhost";
+            serverPort = 50000;
+
+            // Connect to server
+            socket = new Socket(serverIP, serverPort);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String sendRequestToServer(String request) throws IOException {
+
+        out = new PrintWriter(socket.getOutputStream(), true);
+
+        out.println(request);
+
+        socket.setSoTimeout(1);
+
+        String output = null;
+
+        while (output == null) {
+            try {
+                in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                output = in.readLine();
+            } catch (SocketTimeoutException e) {
+
+            }
+
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        socket.setSoTimeout(0);
+
+        return output;
+    }
+
+    public void clientListen() {
+
+        SwingWorker worker = new SwingWorker<String, Object>() {
+            @Override
+            public String doInBackground() {
+                String response = "";
+                try {
+                    response = in.readLine();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return response;
+            }
+
+            @Override
+            public void done() {
+                try {
+                    String response = get();
+
+                    if (response.substring(0, response.indexOf("-")).equals("NEWPARTICIPANT")) {
+                        System.out.println("Sent to Leader client: Someone has joined!");
+                        String username = response.substring(response.indexOf(protocol.SEPARATOR) + 2, response.length() - 3);
+                        model.addParticipants(username);
+                        view.getParticipantsOutput().setText(model.getParticipants() + "\n");
+                        view.getStartGameButton().setEnabled(true);
+                        clientListen();
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        worker.execute();
+    }
+
+    public void handleButtons() {
+
+        view.getLoginButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.setUsername(view.getUsernameInput().getText());
+                model.setPassword(view.getPasswordInput().getText());
+                try {
+                    String request = sendRequestToServer("LOGIN" + protocol.SEPARATOR + model.getUsername() + protocol.SEPARATOR + model.getPassword());
+                    if (request.substring(17, 24).equals("SUCCESS")) {
+                        model.setSessionCookie(request.substring(26, request.length()));
+                        view.setTitle(model.getUsername());
+                        view.setStatusMessage("Welcome!");
+                        view.setView("NEW_OR_JOIN_GAME_STATE");
+                    }
+
+                } catch (IOException a) {
+                    a.printStackTrace();
+                }
+            }
+        });
+
+        view.getRegisterButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.setUsername(view.getUsernameInput().getText());
+                model.setPassword(view.getPasswordInput().getText());
+                try {
+                    String request = sendRequestToServer("CREATENEWUSER" + protocol.SEPARATOR + model.getUsername() + protocol.SEPARATOR + model.getPassword());
+                    if (request.substring(25, 32).equals("SUCCESS")) {
+                        view.setStatusMessage("New user created");
+                    }
+
+                } catch (IOException a) {
+                    a.printStackTrace();
+                }
+            }
+        });
+
+        view.getStartNewGameButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                try {
+                    String request = sendRequestToServer("STARTNEWGAME" + protocol.SEPARATOR + model.getSessionCookie());
+                    if (request.substring(24, 31).equals("SUCCESS")) {
+                        view.setView("LEADER_VIEW_STATE");
+                        model.setGameKey(request.substring(33, request.length()));
+                        view.getGameKeyOutput().setText(model.getGameKey());
+                        view.getGameKeyOutput().setEditable(false);
+                        view.getParticipantsOutput().setEditable(false);
+//                        view.getStartGameButton().setEnabled(false);
+                        clientListen();
+                        view.setStatusMessage("Game started: You are the leader");
+                    }
+                } catch (IOException a) {
+                    a.printStackTrace();
+                }
+            }
+        });
+
+        view.getJoinAGameButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                view.setView("PARTICIPANT_VIEW_STATE");
+
+            }
+        });
+
+        view.getStartGameButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // TODO
+            }
+        });
+
+        view.getJoinGameButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.setGameKey(view.getGameKeyInput().getText());
+                try {
+                    String request = sendRequestToServer("JOINGAME" + protocol.SEPARATOR + model.getSessionCookie() + protocol.SEPARATOR + model.getGameKey());
+                    socket.close();
+                    if (request.substring(20, 27).equals("SUCCESS")) {
+                        view.setView("PARTICIPANT_WAIT_VIEW_STATE");
+                        view.setStatusMessage("Joined game: waiting for leader");
+                    }
+                } catch (IOException a) {
+                    a.printStackTrace();
+                }
+            }
+        });
+
+        view.getSubmitSuggestionButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+        view.getSubmitOptionButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+        view.getNextRoundButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+    }
