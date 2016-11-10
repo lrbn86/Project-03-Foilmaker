@@ -14,15 +14,19 @@ public class FMModel {
     private Foilermaker controller;
     private String username;
     private String password;
+    private String gameToken;
     private String gameKey;
-    private int numOfParticipants;
+    private int numOfParticipants = 1;
     private String[] participants;
     private String[] words;
 
     public FMModel(Foilermaker controller) {
         this.controller = controller;
     }
-
+    
+    public void setUsername(String username){
+    	this.username = username; 
+    }
     public String getUsername() {
         return this.username;
     }
@@ -30,11 +34,25 @@ public class FMModel {
     public String getPassword() {
         return this.password;
     }
-
+    
+    public void setGameToken(String gameToken){
+    	this.gameToken = gameToken;
+    }
+    
+    public String getGameToken(){
+    	return this.gameToken;
+    }
+    public void setGameKey(String gameKey){
+    	this.gameKey = gameKey;
+    }
+    
     public String getGameKey() {
         return this.gameKey;
     }
-
+    
+    public void addParticipant(){
+    	this.numOfParticipants++;
+    }
     public int getNumOfParticipants() {
         return this.numOfParticipants;
     }
