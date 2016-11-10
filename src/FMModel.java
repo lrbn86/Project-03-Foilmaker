@@ -11,18 +11,28 @@
  */
 public class FMModel {
 
-    private Foilermaker controller;
     private String username;
     private String password;
     private String gameKey;
-    private int numOfParticipants;
-    private String[] participants;
-    private String[] words;
+    private String sessionCookie;
+    private int numOfPlayers;
+    private String[] participants = new String[10];
+    private int score;
 
-    public FMModel(Foilermaker controller) {
-        this.controller = controller;
+    public void addParticipants(String name) {
+        participants[numOfPlayers] = name;
+        numOfPlayers++;
     }
 
+    public String getParticipants() {
+        String output = "";
+        for (int i = 0; i < participants.length; i++) {
+            if (participants[i] != null) {
+                output += participants[i] + "\n";
+            }
+        }
+        return output;
+    }
     public String getUsername() {
         return this.username;
     }
@@ -39,7 +49,27 @@ public class FMModel {
         this.password = password;
     }
 
-    public int getNumOfParticipants() {
-        return this.numOfParticipants;
+    public String getSessionCookie() {
+        return this.sessionCookie;
+    }
+
+    public void setSessionCookie(String sessionCookie) {
+        this.sessionCookie = sessionCookie;
+    }
+
+    public String getGameKey() {
+        return this.gameKey;
+    }
+
+    public void setGameKey(String gameKey) {
+        this.gameKey = gameKey;
+    }
+
+    public int getNumOfPlayers() {
+        return this.numOfPlayers;
+    }
+
+    public void setNumOfPlayers(int numOfPlayers) {
+        this.numOfPlayers = numOfPlayers;
     }
 }
