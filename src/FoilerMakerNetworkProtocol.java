@@ -4,25 +4,23 @@
  *
  */
 public class FoilMakerNetworkProtocol {
-
     public static enum MSG_TYPE {
-
         //Client messages to server
 
-        CREATENEWUSER("CREATENEWUSER"), // Tokens: userName  passWord
-        LOGIN("LOGIN"), // Tokens: userName password
-        LOGOUT("LOGOUT"), // Tokens:  currentLoginToken?
-        STARTNEWGAME("STARTNEWGAME"), // No tokens?
-        JOINGAME("JOINGAME"), // Tokens: currentLoginToken gameKey
-        ALLPARTICIPANTSHAVEJOINED("ALLPARTICIPANTSHAVEJOINED"), // Send from leader to server; Tokens: currentLoginToken gameKey
+        CREATENEWUSER, // Tokens: userName  passWord
+        LOGIN, // Tokens: userName password
+        LOGOUT, // Tokens:  currentLoginToken?
+        STARTNEWGAME, // No tokens?
+        JOINGAME, // Tokens: currentLoginToken gameKey
+        ALLPARTICIPANTSHAVEJOINED, // Send from leader to server; Tokens: currentLoginToken gameKey
 
         //Client message to server during a game
-        PLAYERCHOICE("PLAYERCHOICE"), // Tokens: currentLoginToken gameKey user'sChoice
-        PLAYERSUGGESTION("PLAYERSUGGESTION"), // Tokens: currentLoginToken gameKey user'sChoice
+        PLAYERCHOICE, // Tokens: currentLoginToken gameKey user'sChoice
+        PLAYERSUGGESTION, // Tokens: currentLoginToken gameKey user'sChoice
 
         // Server messages to client
-        NEWPARTICIPANT("NEWPARTICIPANT"), //From server to leader; Tokens: participantName cummulativeScore
-        RESPONSE("RESPONSE"), // Server response to user request
+        NEWPARTICIPANT, //From server to leader; Tokens: participantName cummulativeScore
+        RESPONSE, // Server response to user request
                     /* Tokens:
                      * clientRequestMsgType -- the MSG_TYPE of the client's request
                      * responseDetail -- the MSG_DETAIL_T of the server's response
@@ -31,40 +29,29 @@ public class FoilMakerNetworkProtocol {
 
 
         //Server messages to clients during a game
-        NEWGAMEWORD("NEWGAMEWORD"), // From server to players; Tokens: cardFrontText cardBackText
-        ROUNDOPTIONS("ROUNDOPTIONS"), // From server to players; Tokens: randomized list of user suggestions and true answer
-        ROUNDRESULT("ROUNDRESULT"), //From server to players; Tokens: uName1 score1 message1 uName2 score2 message2 ....
-        GAMEOVER("GAMEOVER"); // From server to players: Tokens: MSG_DETAIL
-
-        String command;
-        MSG_TYPE(String command) {
-            this.command = command;
-        }
+        NEWGAMEWORD, // From server to players; Tokens: cardFrontText cardBackText
+        ROUNDOPTIONS, // From server to players; Tokens: randomized list of user suggestions and true answer
+        ROUNDRESULT, //From server to players; Tokens: uName1 score1 message1 uName2 score2 message2 ....
+        GAMEOVER // From server to players: Tokens: MSG_DETAIL
     };
 
     public static enum MSG_DETAIL_T {
-        SUCCESS("SUCCESS"), // Request was successfull. For LOGIN: currentLoginToken;  For STARTNEWGAME: gameKey; For JOINGAME:
+        SUCCESS, // Request was successfull. For LOGIN: currentLoginToken;  For STARTNEWGAME: gameKey; For JOINGAME:
         // gameKey;
-        INVALIDUSERNAME("INVALIDUSERNAME"),
-        INVALIDUSERPASSWORD("INVALIDUSERPASSWORD"),
-        USERALREADYEXISTS("USERALREADYEXISTS"),
-        UNKNOWNUSER("UNKNOWNUSER"),
-        USERALREADYLOGGEDIN("USERALREADYLOGGEDIN"),
-        GAMEKEYNOTFOUND("GAMEKEYNOTFOUND"),
-        NO_CONNECTION_TO_SERVER("NO_CONNECTION_TO_SERVER"),
-        ERROR_OPENING_NETWORK_CONNECTION("ERROR_OPENING_NETWORK_CONNECTION"),
-        USERNOTLOGGEDIN("USERNOTLOGGEDIN"),
-        USERNOTGAMELEADER("USERNOTGAMELEADER"),
-        INVALIDGAMETOKEN("INVALIDGAMETOKEN"),
-        UNEXPECTEDMESSAGETYPE("UNEXPECTEDMESSAGETYPE"),
-        INVALIDMESSAGEFORMAT("INVALIDMESSAGEFORMAT"), //TODO received msg with tokens EXPECTING: expected format
-        FAILURE("FAILURE"); // optional details of failure cause
-
-        String status;
-        MSG_DETAIL_T(String status) {
-            this.status = status;
-        }
-
+        INVALIDUSERNAME,
+        INVALIDUSERPASSWORD,
+        USERALREADYEXISTS,
+        UNKNOWNUSER,
+        USERALREADYLOGGEDIN,
+        GAMEKEYNOTFOUND,
+        NO_CONNECTION_TO_SERVER,
+        ERROR_OPENING_NETWORK_CONNECTION,
+        USERNOTLOGGEDIN,
+        USERNOTGAMELEADER,
+        INVALIDGAMETOKEN,
+        UNEXPECTEDMESSAGETYPE,
+        INVALIDMESSAGEFORMAT, //TODO received msg with tokens EXPECTING: expected format
+        FAILURE // optional details of failure cause
     };
 
     //TODO Create error codes type and values
