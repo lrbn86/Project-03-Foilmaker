@@ -3,9 +3,9 @@
  *
  * Data
  *
- * @author Brandon Nguyen, nguye299@purdue.edu, Lab Section G06
+ * Brandon Nguyen & Daniel Acevedo, nguye299@purdue.edu & acevedd@purdue.edu, Lab Section G06
  *
- * @version November 09, 2016
+ * @version November 11, 2016
  *
  */
 public class FMModel {
