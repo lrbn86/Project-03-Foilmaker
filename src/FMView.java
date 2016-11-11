@@ -4,7 +4,8 @@ import java.awt.*;
 /**
  * FMView.java
  *
- * GUI
+ * This class shows game changes and updates to the user.
+ * Implements Java GUI classes.
  *
  * Brandon Nguyen & Daniel Acevedo, nguye299@purdue.edu & acevedd@purdue.edu, Lab Section G06
  *
