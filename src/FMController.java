@@ -11,12 +11,11 @@ import java.net.SocketTimeoutException;
 /**
  * FMController.java
  *
- * This class manipulates data in the model as per user interactions.
- * Implements network programming bits, application protocol, etc.
+ * Network 
  *
  * @author Brandon Nguyen & Daniel Acevedo, nguye299@purdue.edu & acevedd@purdue.edu, Lab Section G06
  *
- * @version November 10, 2016
+ * @version November 11, 2016
  *
  */
 public class FMController {
@@ -82,7 +81,7 @@ public class FMController {
         return output;
     }
 
-    public void leaderClientListen() {
+    public void leaderClientListensForParticipants() {
 
         SwingWorker worker = new SwingWorker<String, Object>() {
             @Override
@@ -107,7 +106,6 @@ public class FMController {
                         model.addParticipants(username);
                         view.getParticipantsOutput().setText(model.getParticipants() + "\n");
                         view.getStartGameButton().setEnabled(true);
-                        leaderClientListen();
                     }
 
                 } catch (Exception e) {
@@ -118,7 +116,7 @@ public class FMController {
         worker.execute();
     }
 
-    public void participantClientListen() {
+    public void participantClientListensLeader() {
 
         SwingWorker worker = new SwingWorker<String, Object>() {
             @Override
@@ -203,7 +201,7 @@ public class FMController {
                         view.getGameKeyOutput().setEditable(false);
                         view.getParticipantsOutput().setEditable(false);
 //                        view.getStartGameButton().setEnabled(false);
-                        leaderClientListen();
+                        leaderClientListensForParticipants();
                         view.setStatusMessage("Game started: You are the leader");
                     }
                 } catch (IOException a) {
@@ -227,8 +225,6 @@ public class FMController {
                     String request = sendRequestToServer("ALLPARTICIPANTSHAVEJOINED" + protocol.SEPARATOR + model.getSessionCookie() + protocol.SEPARATOR + model.getGameKey());
                     view.setView("GIVE_SUGGESTION_STATE");
                     view.setStatusMessage("Enter your suggestion");
-
-                    // TODO leader client freezes...
                 } catch (IOException a) {
                     a.printStackTrace();
                 }
@@ -243,7 +239,7 @@ public class FMController {
                     String request = sendRequestToServer("JOINGAME" + protocol.SEPARATOR + model.getSessionCookie() + protocol.SEPARATOR + model.getGameKey());
                     if (request.substring(20, 27).equals("SUCCESS")) {
                         view.setView("PARTICIPANT_WAIT_VIEW_STATE");
-                        participantClientListen();
+                        participantClientListensLeader();
                         view.setStatusMessage("Joined game: waiting for leader");
                     }
                 } catch (IOException a) {
