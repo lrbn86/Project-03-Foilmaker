@@ -1,7 +1,8 @@
 /**
  * FMModel.java
  *
- * Data
+ * This class maintains data structures that reflects the internal state of the whole application.
+ * Captures data (questions, qord suggestions, etc. received from the server)
  *
  * Brandon Nguyen & Daniel Acevedo, nguye299@purdue.edu & acevedd@purdue.edu, Lab Section G06
  *
