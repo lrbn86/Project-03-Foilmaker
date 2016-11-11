@@ -4,12 +4,11 @@ import java.awt.*;
 /**
  * FMView.java
  *
- * This class shows game changes and updates to the user.
- * Implements Java GUI classes.
+ * GUI
  *
- * @author Brandon Nguyen & Daniel Acevedo, nguye299@purdue.edu & acevedd@purdue.edu, Lab Section G06
+ * @author Brandon Nguyen, nguye299@purdue.edu, Lab Section G06
  *
- * @version November 10, 2016
+ * @version November 09, 2016
  *
  */
 public class FMView extends JFrame {
@@ -28,7 +27,9 @@ public class FMView extends JFrame {
     private JPasswordField passwordInput = new JPasswordField (8);
     private JTextField gameKeyOutput = new JTextField (3);
     private JTextField gameKeyInput = new JTextField (3);
+    private JTextField suggestionInput = new JTextField(10);
     private JTextArea participantsOutput = new JTextArea(3, 0);
+    private JTextArea descriptionOutput = new JTextArea(3, 0);
 
     private JLabel title = new JLabel ("FoilMaker!");
     private JLabel statusMessage = new JLabel ();
@@ -157,7 +158,15 @@ public class FMView extends JFrame {
         return PARTICIPANT_WAIT_VIEW_STATE;
     }
 
+    // TODO
     public JPanel getGiveSuggestionState() {
+
+        GIVE_SUGGESTION_STATE.add(new JLabel("What is the word for"));
+        GIVE_SUGGESTION_STATE.add(descriptionOutput);
+        suggestionInput.setBorder(BorderFactory.createTitledBorder("Your suggestion"));
+        GIVE_SUGGESTION_STATE.add(suggestionInput);
+
+
         return GIVE_SUGGESTION_STATE;
     }
 
@@ -168,6 +177,7 @@ public class FMView extends JFrame {
     public JPanel getResultState() {
         return RESULT_STATE;
     }
+
 
     public JButton getLoginButton() {
         return this.loginButton;
@@ -219,6 +229,10 @@ public class FMView extends JFrame {
 
     public JTextArea getParticipantsOutput() {
         return this.participantsOutput;
+    }
+
+    public JTextArea getDescriptionOutput() {
+        return this.descriptionOutput;
     }
 
     public JPasswordField getPasswordInput() {
