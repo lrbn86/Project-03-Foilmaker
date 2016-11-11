@@ -82,7 +82,7 @@ public class FMController {
         return output;
     }
 
-    public void clientListen() {
+    public void leaderClientListen() {
 
         SwingWorker worker = new SwingWorker<String, Object>() {
             @Override
@@ -107,7 +107,40 @@ public class FMController {
                         model.addParticipants(username);
                         view.getParticipantsOutput().setText(model.getParticipants() + "\n");
                         view.getStartGameButton().setEnabled(true);
-                        clientListen();
+                        leaderClientListen();
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        worker.execute();
+    }
+
+    public void participantClientListen() {
+
+        SwingWorker worker = new SwingWorker<String, Object>() {
+            @Override
+            public String doInBackground() {
+                String response = "";
+                try {
+                    response = in.readLine();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return response;
+            }
+
+            @Override
+            public void done() {
+                try {
+                    String response = get();
+
+                    if (response.substring(0, response.indexOf("-")).equals("NEWGAMEWORD")) {
+                        System.out.println("Sent to participant client: Leader has started game!");
+                        view.setView("GIVE_SUGGESTION_STATE");
+                        view.setStatusMessage("Enter your suggestion");
                     }
 
                 } catch (Exception e) {
@@ -170,7 +203,7 @@ public class FMController {
                         view.getGameKeyOutput().setEditable(false);
                         view.getParticipantsOutput().setEditable(false);
 //                        view.getStartGameButton().setEnabled(false);
-                        clientListen();
+                        leaderClientListen();
                         view.setStatusMessage("Game started: You are the leader");
                     }
                 } catch (IOException a) {
@@ -190,7 +223,15 @@ public class FMController {
         view.getStartGameButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO
+                try {
+                    String request = sendRequestToServer("ALLPARTICIPANTSHAVEJOINED" + protocol.SEPARATOR + model.getSessionCookie() + protocol.SEPARATOR + model.getGameKey());
+                    view.setView("GIVE_SUGGESTION_STATE");
+                    view.setStatusMessage("Enter your suggestion");
+
+                    // TODO leader client freezes...
+                } catch (IOException a) {
+                    a.printStackTrace();
+                }
             }
         });
 
@@ -200,9 +241,9 @@ public class FMController {
                 model.setGameKey(view.getGameKeyInput().getText());
                 try {
                     String request = sendRequestToServer("JOINGAME" + protocol.SEPARATOR + model.getSessionCookie() + protocol.SEPARATOR + model.getGameKey());
-                    socket.close();
                     if (request.substring(20, 27).equals("SUCCESS")) {
                         view.setView("PARTICIPANT_WAIT_VIEW_STATE");
+                        participantClientListen();
                         view.setStatusMessage("Joined game: waiting for leader");
                     }
                 } catch (IOException a) {
@@ -232,3 +273,4 @@ public class FMController {
             }
         });
     }
+}
