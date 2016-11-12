@@ -2,58 +2,123 @@
  * FMModel.java
  *
  * This class maintains data structures that reflects the internal state of the whole application.
- * Captures data (questions, qord suggestions, etc. received from the server)
+ * Captures data (questions, word suggestions, etc. received from the server)
  *
- * @author Brandon Nguyen & Daniel Acevedo, nguye299@purdue.edu & acevedd@purdue.edu, Lab Section G06
+ * Brandon Nguyen & Daniel Acevedo, nguye299@purdue.edu & acevedd@purdue.edu, Lab Section G06
  *
- * @version October 18, 2016
+ * @version November 11, 2016
  *
  */
 public class FMModel {
 
-    private Foilermaker controller;
     private String username;
     private String password;
-    private String gameToken;
     private String gameKey;
-    private int numOfParticipants = 1;
-    private String[] participants;
-    private String[] words;
-
-    public FMModel(Foilermaker controller) {
-        this.controller = controller;
-    }
+    private String sessionCookie;
+    private String suggestion;
+    private String correctWord;
+    private int numOfPlayers;
+    private int numOfWords;
+    private String[] participants = new String[10];
+    private String[] words = new String[10];
+    private int score;
+    private String choice;
+    private String optionOne, optionTwo, optionThree;
+    private String results;
     
-    public void setUsername(String username){
-    	this.username = username; 
+    public void addWords(String word) {
+        words[numOfWords] = word;
+        numOfWords++;
+    }
+
+    public void addParticipants(String name) {
+        participants[numOfPlayers] = name;
+        numOfPlayers++;
+    }
+
+    public String getParticipants() {
+        String output = "";
+        for (int i = 0; i < participants.length; i++) {
+            if (participants[i] != null) {
+                output += participants[i] + "\n";
+            }
+        }
+        return output;
     }
     public String getUsername() {
         return this.username;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public String getPassword() {
         return this.password;
     }
-    
-    public void setGameToken(String gameToken){
-    	this.gameToken = gameToken;
+
+    public void setPassword(String password) {
+        this.password = password;
     }
-    
-    public String getGameToken(){
-    	return this.gameToken;
+
+    public String getSessionCookie() {
+        return this.sessionCookie;
     }
-    public void setGameKey(String gameKey){
-    	this.gameKey = gameKey;
+
+    public void setSessionCookie(String sessionCookie) {
+        this.sessionCookie = sessionCookie;
     }
-    
+
     public String getGameKey() {
         return this.gameKey;
     }
-    
-    public void addParticipant(){
-    	this.numOfParticipants++;
+
+    public void setGameKey(String gameKey) {
+        this.gameKey = gameKey;
     }
-    public int getNumOfParticipants() {
-        return this.numOfParticipants;
+
+    public int getNumOfPlayers() {
+        return this.numOfPlayers;
+    }
+
+    public void setNumOfPlayers(int numOfPlayers) {
+        this.numOfPlayers = numOfPlayers;
+    }
+
+    public String getSuggestion() {
+        return this.suggestion;
+    }
+
+    public void setSuggestion(String suggestion) {
+        this.suggestion = suggestion;
+    }
+    public void setOptions(String str1, String str2, String str3){
+    	this.optionOne = str1;
+    	this.optionTwo = str2;
+    	this.optionThree = str3;
+    }
+    public String getOptionOne(){
+    	return this.optionOne;
+    }
+    public String getOptionTwo(){
+    	return this.optionTwo;
+    }
+    public String getOptionThree(){
+    	return this.optionThree;
+    }
+    public void setChoice(String choice){
+    	this.choice = choice;
+    }
+    
+    public String getChoice(){
+    	return this.choice;
+    }
+    
+    public void setResults(String str){
+    	this.results = str;
+    }
+    
+    public String getResults(){
+    	return this.results;
     }
 }
