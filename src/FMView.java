@@ -22,7 +22,10 @@ public class FMView extends JFrame {
     private JButton submitSuggestionButton = new JButton ("Submit Suggestion");
     private JButton submitOptionButton = new JButton ("Submit Option");
     private JButton nextRoundButton = new JButton ("Next Round");
-
+    private JRadioButton optionOne = new JRadioButton();
+    private JRadioButton optionTwo = new JRadioButton();
+    private JRadioButton optionThree = new JRadioButton();
+    
     private JTextField usernameInput = new JTextField (8);
     private JPasswordField passwordInput = new JPasswordField (8);
     private JTextField gameKeyOutput = new JTextField (3);
@@ -161,23 +164,39 @@ public class FMView extends JFrame {
 
     // TODO
     public JPanel getGiveSuggestionState() {
-    	 GridBagConstraints c = new GridBagConstraints();
-         c.gridx = 0;
-         c.gridy = 0;
+    	GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = 0;
 
-        GIVE_SUGGESTION_STATE.add(new JLabel("What is the word for"));
+        GIVE_SUGGESTION_STATE.add(new JLabel("What is the word for"), c);
+        c.gridy++;
+        descriptionOutput.setPreferredSize(new Dimension(200, 250));
         GIVE_SUGGESTION_STATE.add(descriptionOutput, c);
+        c.gridy++;
         suggestionInput.setBorder(BorderFactory.createTitledBorder("Your suggestion"));
-        GIVE_SUGGESTION_STATE.add(suggestionInput);
+        GIVE_SUGGESTION_STATE.add(suggestionInput, c);
+        c.gridy++;
         GIVE_SUGGESTION_STATE.add(submitSuggestionButton, c);
-        c.gridx ++;
-        c.gridy = 2;
 
         return GIVE_SUGGESTION_STATE;
     }
 
     public JPanel getSubmitOptionState() {
-    	
+    	GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = 0;
+        
+        SUBMIT_OPTION_STATE.add(new JLabel("Pick your option below"), c);
+        c.gridy++;
+        
+        SUBMIT_OPTION_STATE.add(this.optionOne, c);
+        c.gridy++;
+        SUBMIT_OPTION_STATE.add(this.optionTwo, c);
+        c.gridy++;
+        SUBMIT_OPTION_STATE.add(this.optionThree, c);
+        c.gridy++;
+        SUBMIT_OPTION_STATE.add(this.submitOptionButton, c);
+        c.gridy++;
         return SUBMIT_OPTION_STATE;
     }
 
@@ -248,5 +267,17 @@ public class FMView extends JFrame {
     
     public JTextField getSuggestionInput(){
     	return this.suggestionInput;
+    }
+    
+    public JRadioButton getOptionOne(){
+    	return this.optionOne;
+    }
+    
+    public JRadioButton getOptionTwo(){
+    	return this.optionTwo;
+    }
+    
+    public JRadioButton getOptionThree(){
+    	return this.optionThree;
     }
 }
