@@ -15,9 +15,18 @@ public class FMModel {
     private String password;
     private String gameKey;
     private String sessionCookie;
+    private String suggestion;
+    private String correctWord;
     private int numOfPlayers;
+    private int numOfWords;
     private String[] participants = new String[10];
+    private String[] words = new String[10];
     private int score;
+
+    public void addWords(String word) {
+        words[numOfWords] = word;
+        numOfWords++;
+    }
 
     public void addParticipants(String name) {
         participants[numOfPlayers] = name;
@@ -71,5 +80,13 @@ public class FMModel {
 
     public void setNumOfPlayers(int numOfPlayers) {
         this.numOfPlayers = numOfPlayers;
+    }
+
+    public String getSuggestion() {
+        return this.suggestion;
+    }
+
+    public void setSuggestion(String suggestion) {
+        this.suggestion = suggestion;
     }
 }
