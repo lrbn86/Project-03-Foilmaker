@@ -159,13 +159,21 @@ public class FMView extends JFrame {
         return PARTICIPANT_WAIT_VIEW_STATE;
     }
 
-    // TODO
     public JPanel getGiveSuggestionState() {
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = 0;
 
-        GIVE_SUGGESTION_STATE.add(new JLabel("What is the word for"));
-        GIVE_SUGGESTION_STATE.add(descriptionOutput);
+        GIVE_SUGGESTION_STATE.add(new JLabel("What is the word for"), c);
+        c.gridy++;
+        descriptionOutput.setPreferredSize(new Dimension(200, 250));
+        descriptionOutput.setEditable(false);
+        GIVE_SUGGESTION_STATE.add(descriptionOutput, c);
+        c.gridy++;
         suggestionInput.setBorder(BorderFactory.createTitledBorder("Your suggestion"));
-        GIVE_SUGGESTION_STATE.add(suggestionInput);
+        GIVE_SUGGESTION_STATE.add(suggestionInput, c);
+        c.gridy++;
+        GIVE_SUGGESTION_STATE.add(submitSuggestionButton, c);
 
 
         return GIVE_SUGGESTION_STATE;
@@ -226,6 +234,10 @@ public class FMView extends JFrame {
 
     public JTextField getGameKeyInput() {
         return this.gameKeyInput;
+    }
+
+    public JTextField getSuggestionInput() {
+        return this.suggestionInput;
     }
 
     public JTextArea getParticipantsOutput() {
