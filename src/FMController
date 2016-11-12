@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.Arrays;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
@@ -268,9 +269,20 @@ public class FMController {
             	try{
             		String request = sendRequestToServer("PLAYERSUGGESTION" + protocol.SEPARATOR + model.getSessionCookie() + protocol.SEPARATOR + model.getGameKey() + protocol.SEPARATOR + view.getSuggestionInput().getText());
             		
+            		String[] str = breakResponse(request);
+            		System.out.println(Arrays.toString(str));
+            		String optionOne = str[1];
+            		String optionTwo = str[2];
+            		String optionThree = str[3];
+            		
+            		model.setOptions(optionOne, optionTwo, optionThree);
+            		
             		if(request.substring(0,12).equals("ROUNDOPTIONS")){
             			view.setView("SUBMIT_OPTION_STATE");
             			view.setStatusMessage("Pick your choice");
+            			view.getOptionOne().setText(optionOne);
+            			view.getOptionTwo().setText(optionTwo);
+            			view.getOptionThree().setText(optionThree);
             		}
             		
             	}catch(IOException a){
@@ -282,8 +294,35 @@ public class FMController {
         view.getSubmitOptionButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-            }
+            	try{
+            		String request = sendRequestToServer("PLAYERCHOICE" + protocol.SEPARATOR + model.getSessionCookie() + protocol.SEPARATOR + model.getGameKey() + protocol.SEPARATOR + model.getChoice());
+            		
+            		model.setResults(request);
+            		
+            	}catch(IOException a){
+            		a.printStackTrace();
+            	}
+        }});
+        
+        view.getOptionOne().addActionListener(new ActionListener(){
+        	public void actionPerformed(ActionEvent e){
+        		JRadioButton button = (JRadioButton) e.getSource();
+        		model.setChoice(model.getOptionOne());
+        	}
+        });
+        
+        view.getOptionTwo().addActionListener(new ActionListener(){
+        	public void actionPerformed(ActionEvent e){
+        		JRadioButton button = (JRadioButton) e.getSource();
+        		model.setChoice(model.getOptionTwo());
+        	}
+        });
+        
+        view.getOptionThree().addActionListener(new ActionListener(){
+        	public void actionPerformed(ActionEvent e){
+        		JRadioButton button = (JRadioButton) e.getSource();
+        		model.setChoice(model.getOptionThree());
+        	}
         });
 
         view.getNextRoundButton().addActionListener(new ActionListener() {
@@ -292,5 +331,10 @@ public class FMController {
 
             }
         });
+    }
+    
+    public String[] breakResponse(String str){
+    	String[] strArray = str.split("--");
+    	return strArray;
     }
 }
